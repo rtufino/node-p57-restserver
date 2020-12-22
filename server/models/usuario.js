@@ -1,6 +1,7 @@
 const mogoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
+
 let Schema = mogoose.Schema;
 
 let rolesValidos = {
@@ -42,5 +43,13 @@ let usuarioSchema = new Schema({
 });
 
 usuarioSchema.plugin(uniqueValidator, {message: '{PATH} debe ser único'});
+
+usuarioSchema.methods.toJSON = function () {
+    let user = this;
+    let userObjet = user.toObject();
+    delete userObjet.password;
+
+    return userObjet;
+}
 
 module.exports = mogoose.model('Usuario', usuarioSchema);
